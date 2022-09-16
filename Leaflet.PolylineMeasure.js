@@ -368,14 +368,14 @@
                  * @type {String}
                  * @default
                  */
-                text: '&#x27a4;',
+                textArrow: '&#x27a4;',
                 /**
                  * Image icon takes advantages over the iconText.
                  * The default image direction to make the rotated image look right is to the right
                  * @type {String}
                  * @default
                  */
-                iconImageSrc: '',
+                imageArrowSrc: '',
                 /**
                  * Class for arrow icon
                  *
@@ -383,7 +383,7 @@
                  * @type {String}
                  * @default
                  */
-                iconClass: '',
+                class: '',
                 /**
                  * Icon size in L.divIcon
                  * @type {[Number, Number]}
@@ -811,8 +811,8 @@
                 className: "",  // to avoid getting a default class with paddings and borders assigned by Leaflet
                 iconSize: this.options.icon.iconSize,
                 iconAnchor: this.options.icon.iconAnchor,
-                html : this.options.icon.iconImageSrc !== '' ? "<img class='polyline-measure-image-arrow " + this.options.icon.iconClass + "' src='" + this.options.icon.iconImageSrc + "' style='background:transparent; height:100%; vertical-align:top; transform:rotate("+ cssAngle +"deg)'>"
-                    : "<div class='polyline-measure-text-arrow " + this.options.icon.iconClass + "' style = 'transform: rotate("+ cssAngle +"deg)'>&#x27a4;</div>"   // best results if iconSize = font-size = line-height and iconAnchor font-size/2 .both values needed to position symbol in center of L.divIcon for all font-sizes.
+                html : this.options.icon.imageArrowSrc !== '' ? "<img class='polyline-measure-image-arrow " + this.options.icon.class + "' src='" + this.options.icon.imageArrowSrc + "' style='background:transparent; height:100%; vertical-align:top; transform:rotate("+ cssAngle +"deg)'>"
+                    : "<div class='polyline-measure-text-arrow " + this.options.icon.class + "' style = 'transform: rotate("+ cssAngle +"deg)'>" + this.options.icon.textArrow + "</div>"   // best results if iconSize = font-size = line-height and iconAnchor font-size/2 .both values needed to position symbol in center of L.divIcon for all font-sizes.
             });
             var newArrowMarker = L.marker (center, {icon: iconArrow, zIndexOffset:-50}).addTo(this._layerPaint);  // zIndexOffset to draw arrows below tooltips
             if (!this._currentLine){  // just bind tooltip if not drawing line anymore, cause following the instruction of tooltip is just possible when not drawing a line
