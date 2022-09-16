@@ -52,7 +52,7 @@
              * @type {Boolean}
              * @default
              */
-            useSubunits: true,            
+            useSubunits: true,
             /**
              * Clear all measurements when Measure Control is switched off
              * @type {Boolean}
@@ -357,7 +357,46 @@
                  * @default
                  */
                 radius: 3
-            }
+            },
+            /**
+             * Settings for arrow icon
+             * @type {Object}
+             */
+            icon: {
+                /**
+                 * Unicode icon
+                 * @type {String}
+                 * @default
+                 */
+                text: '&#x27a4;',
+                /**
+                 * Image icon takes advantages over the iconText.
+                 * The default image direction to make the rotated image look right is to the right
+                 * @type {String}
+                 * @default
+                 */
+                iconImageSrc: '',
+                /**
+                 * Class for arrow icon
+                 *
+                 * best results for *text arrow* if iconSize = font-size = line-height and iconAnchor font-size/2 .both values needed to position symbol in center of L.divIcon for all font-sizes.
+                 * @type {String}
+                 * @default
+                 */
+                iconClass: '',
+                /**
+                 * Icon size in L.divIcon
+                 * @type {[Number, Number]}
+                 * @default
+                 */
+                iconSize: [16, 16],
+                /**
+                 * Position anchor in L.divIcon
+                 * @type {[Number, Number]}
+                 * @default
+                 */
+                iconAnchor: [8, 8],
+            },
         },
 
         _arcpoints: 100,  // 100 points = 99 line segments. lower value to make arc less accurate or increase value to make it more accurate.
@@ -770,10 +809,10 @@
             var cssAngle = -Math.atan2(diffLat12, diffLng12)*57.29578   // convert radiant to degree as needed for use as CSS value; cssAngle is opposite to mathematical angle.
             var iconArrow = L.divIcon ({
                 className: "",  // to avoid getting a default class with paddings and borders assigned by Leaflet
-                iconSize: [16, 16],
-                iconAnchor: [8, 8],
-                    // html : "<img src='iconArrow.png' style='background:green; height:100%; vertical-align:top; transform:rotate("+ cssAngle +"deg)'>"  <<=== alternative method by the use of an image instead of a Unicode symbol.
-                html : "<div style = 'font-size: 16px; line-height: 16px; vertical-align:top; transform: rotate("+ cssAngle +"deg)'>&#x27a4;</div>"   // best results if iconSize = font-size = line-height and iconAnchor font-size/2 .both values needed to position symbol in center of L.divIcon for all font-sizes.
+                iconSize: this.options.icon.iconSize,
+                iconAnchor: this.options.icon.iconAnchor,
+                html : this.options.icon.iconImageSrc !== '' ? "<img class='polyline-measure-image-arrow " + this.options.icon.iconClass + "' src='" + this.options.icon.iconImageSrc + "' style='background:transparent; height:100%; vertical-align:top; transform:rotate("+ cssAngle +"deg)'>"
+                    : "<div class='polyline-measure-text-arrow " + this.options.icon.iconClass + "' style = 'transform: rotate("+ cssAngle +"deg)'>&#x27a4;</div>"   // best results if iconSize = font-size = line-height and iconAnchor font-size/2 .both values needed to position symbol in center of L.divIcon for all font-sizes.
             });
             var newArrowMarker = L.marker (center, {icon: iconArrow, zIndexOffset:-50}).addTo(this._layerPaint);  // zIndexOffset to draw arrows below tooltips
             if (!this._currentLine){  // just bind tooltip if not drawing line anymore, cause following the instruction of tooltip is just possible when not drawing a line

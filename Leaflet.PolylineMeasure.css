@@ -56,3 +56,15 @@ a.polyline-measure-clearControl:active {
     font: 11px Arial, Helvetica, sans-serif;
     line-height: 11px;
 }
+
+.polyline-measure-text-arrow {
+    font-size: 16px;
+    line-height: 16px;
+    vertical-align:top;
+}
+
+.polyline-measure-image-arrow {
+    font-size: 16px;
+    line-height: 16px;
+    vertical-align:top;
+}
