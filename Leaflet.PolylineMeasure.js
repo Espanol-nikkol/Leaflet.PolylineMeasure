@@ -844,7 +844,7 @@
 
         _startLine: function (clickCoords) {
             var icon = L.divIcon({
-                className: 'polyline-measure-tooltip',
+                className: 'polyline-measure-tooltip polyline-measure-tooltip-temp',
                 iconAnchor: [-4, -4]
             });
             var last = function() {
