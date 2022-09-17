@@ -925,6 +925,7 @@
                         var distanceSegment = lastCircleCoords.distanceTo (mouseCoords);
                         this.distance += distanceSegment;
                         var currentTooltip = polylineState._currentLine.tooltips.last();
+                        currentTooltip._icon.classList.remove('polyline-measure-tooltip-temp')
                         var prevTooltip = polylineState._currentLine.tooltips.slice(-1,-2)[0];
                         polylineState._updateTooltip (currentTooltip, prevTooltip, this.distance, distanceSegment, lastCircleCoords, mouseCoords);
                     }
