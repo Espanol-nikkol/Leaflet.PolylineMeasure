@@ -925,7 +925,6 @@
                         var distanceSegment = lastCircleCoords.distanceTo (mouseCoords);
                         this.distance += distanceSegment;
                         var currentTooltip = polylineState._currentLine.tooltips.last();
-                        currentTooltip._icon.classList.remove('polyline-measure-tooltip-temp')
                         var prevTooltip = polylineState._currentLine.tooltips.slice(-1,-2)[0];
                         polylineState._updateTooltip (currentTooltip, prevTooltip, this.distance, distanceSegment, lastCircleCoords, mouseCoords);
                     }
@@ -933,6 +932,8 @@
                     if (currentTooltip) {
                         currentTooltip.setLatLng (mouseCoords);
                     }
+                    polylineState._currentLine.tooltips.last()._icon.classList.remove('polyline-measure-tooltip-temp')
+
                     // add new tooltip to update on mousemove
                     var tooltipNew = this.getNewToolTip(mouseCoords);
                     tooltipNew.addTo(polylineState._layerPaint);
@@ -1119,6 +1120,11 @@
             } else {
                this._e1.target.bindTooltip (this.options.tooltipTextMove + this.options.tooltipTextDelete, {direction:'top', opacity:0.7, className:'polyline-measure-popupTooltip'});
             }
+            const cntLine = this._arrPolylines[this._e1.target.cntLine];
+            cntLine.tooltips[this._movedTooltip]._icon.classList.remove('polyline-measure-tooltip-temp');
+            if (this._movedTooltip !== cntLine.tooltips.length - 1) {
+                cntLine.tooltips[this._movedTooltip + 1]._icon.classList.remove('polyline-measure-tooltip-temp');
+            }
             this._resetPathVariables();
             this._map.off ('mousemove', this._dragCircleMousemove, this);
             this._map.dragging.enable();
@@ -1169,6 +1175,9 @@
             var totalDistance = 0;
             // update tooltip texts of each tooltip
             this._arrPolylines[lineNr].tooltips.map (function (item, index) {
+                if (index === this._movedTooltip || index === this._movedTooltip + 1) {
+                    item._icon.classList.add('polyline-measure-tooltip-temp');
+                }
                 if (index >= 1) {
                     var distance = this._arrPolylines[lineNr].circleCoords[index-1].distanceTo (this._arrPolylines[lineNr].circleCoords[index]);
                     var lastCircleCoords = this._arrPolylines[lineNr].circleCoords[index - 1];
@@ -1263,7 +1272,7 @@
                     }).addTo(this._layerPaint).bringToBack();
                     this._tooltipNew = L.marker (currentCircleCoords, {
                         icon: L.divIcon({
-                            className: 'polyline-measure-tooltip',
+                            className: 'polyline-measure-tooltip polyline-measure-tooltip-temp',
                             iconAnchor: [-4, -4]
                         }),
                         interactive: false
@@ -1474,6 +1483,11 @@
                 this._map.off ('click', this._mouseClick, this);
                 this._mouseStartingLat = e1.latlng.lat;
                 this._mouseStartingLng = e1.latlng.lng;
+                this._arrPolylines[this._e1.target.cntLine].tooltips.forEach((item, index) => {
+                    if (item._latlng.lat === e1.latlng.lat && item._latlng.lng === e1.latlng.lng) {
+                        this._movedTooltip = index;
+                    }
+                })
                 this._circleStartingLat = e1.target._latlng.lat;
                 this._circleStartingLng = e1.target._latlng.lng;
                 this._map.on ('mousemove', this._dragCircleMousemove, this);
